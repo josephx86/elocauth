@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "994195534523",
+    "project_id": "eloc-control-panel",
+    "storage_bucket": "eloc-control-panel.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994195534523:android:ffbc2a2ed9d1e618d1ef9e",
+        "android_client_info": {
+          "package_name": "com.pixispace.elocauth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "994195534523-ct2gp1bovgareaeqpds07j3fgoo16968.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pixispace.elocauth",
+            "certificate_hash": "7e148ac0ed800572f2532fed5d1bf4a4283ee8d9"
+          }
+        },
+        {
+          "client_id": "994195534523-05bb7t682uu2nd149hqgofme7j6u6qm1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhSB45pnqEBMr1r_ddC8jMl9Qa3FCA8sg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "994195534523-05bb7t682uu2nd149hqgofme7j6u6qm1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
