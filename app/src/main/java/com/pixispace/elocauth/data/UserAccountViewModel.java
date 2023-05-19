@@ -7,8 +7,10 @@ import android.graphics.Bitmap;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.pixispace.elocauth.callbacks.BooleanCallback;
+import com.pixispace.elocauth.callbacks.ProfileCallback;
 import com.pixispace.elocauth.callbacks.StringCallback;
 
 import java.util.HashMap;
@@ -16,6 +18,7 @@ import java.util.HashMap;
 public class UserAccountViewModel extends AndroidViewModel {
 
     private final UserAccountRepository repository;
+    private final MutableLiveData<UserProfile> userProfileLiveData = new MutableLiveData<>();
 
     public UserAccountViewModel(@NonNull Application application) {
         super(application);
@@ -81,4 +84,14 @@ public class UserAccountViewModel extends AndroidViewModel {
     public void sendEmailVerificationLink(BooleanCallback callback) {
         repository.sendEmailVerificationLink(callback);
     }
+
+    public void getProfile() {
+        repository.getProfile(userProfileLiveData::setValue);
+    }
+
+    public LiveData<UserProfile> watchProfile() {
+        return userProfileLiveData;
+    }
+
+
 }

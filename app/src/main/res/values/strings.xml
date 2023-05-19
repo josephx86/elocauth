@@ -50,4 +50,16 @@
     <string name="resend_failed">Failed to re-send the link to your email address</string>
     <string name="email_verification">Email verification</string>
     <string name="redirect_to_sign_in">You will be redirected to the sign in screen.</string>
+    <string name="close_menu">Close menu</string>
+    <string name="user_id_template">User ID: %s</string>
+    <string name="edit">Edit</string>
+    <string name="synchronize_clock">Synchronize clock</string>
+    <string name="find_my_eloc">Find my ELOC</string>
+    <string name="upload_eloc_status">Upload ELOC status</string>
+    <string name="refresh">Refresh</string>
+    <string name="my_eloc">My ELOC</string>
+    <string name="bluetooth_settings">Bluetooth settings</string>
+    <string name="browse_eloc_status">Browse ELOC status</string>
+    <string name="preferences">Preferences</string>
+    <string name="landing_page">Landing page</string>
 </resources>

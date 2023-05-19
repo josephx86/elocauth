@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.pixispace.elocauth.callbacks.BooleanCallback;
+import com.pixispace.elocauth.callbacks.ProfileCallback;
 import com.pixispace.elocauth.callbacks.StringCallback;
 import com.pixispace.elocauth.data.firebase.AuthHelper;
 import com.pixispace.elocauth.data.firebase.FirestoreHelper;
@@ -109,5 +110,11 @@ public class UserAccountRepository {
 
     void sendEmailVerificationLink(BooleanCallback callback) {
         authHelper.sendVerificationLink(callback);
+    }
+
+    void getProfile(ProfileCallback callback) {
+        String id = authHelper.getUserId();
+        String emailAddress = getEmailAddress();
+        firestoreHelper.getProfile(id, emailAddress, callback);
     }
 }

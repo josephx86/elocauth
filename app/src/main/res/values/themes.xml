@@ -7,4 +7,5 @@
     </style>
 
     <style name="Theme.ElocAuth" parent="Base.Theme.ElocAuth" />
+
 </resources>
