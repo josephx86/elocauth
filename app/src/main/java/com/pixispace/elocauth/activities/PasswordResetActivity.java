@@ -4,14 +4,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.pixispace.elocauth.R;
 import com.pixispace.elocauth.data.UserAccountViewModel;
 import com.pixispace.elocauth.databinding.ActivityPasswordResetBinding;
 
-public class PasswordResetActivity extends AppCompatActivity {
+public class PasswordResetActivity extends NoActionBarActivity {
     private ActivityPasswordResetBinding binding;
     private UserAccountViewModel viewModel;
 

@@ -1,16 +1,17 @@
 package com.pixispace.elocauth.activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.pixispace.elocauth.callbacks.VoidCallback;
-import com.pixispace.elocauth.data.UserAccountViewModel;
+import com.pixispace.elocauth.databinding.LayoutAlertOkBinding;
 
 public class ActivityHelper {
 
@@ -27,7 +28,7 @@ public class ActivityHelper {
         }
     }
 
-    public static void showModalAlert(Context context, String title, String message) {
+    private static void showDialog(Context context, String title, String message, VoidCallback callback) {
         if (message == null) {
             message = "";
         }
@@ -35,33 +36,28 @@ public class ActivityHelper {
         if ((context == null) || message.isEmpty()) {
             return;
         }
-        new AlertDialog.Builder(context)
-                .setCancelable(false)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(android.R.string.ok, ((dialog, w) -> dialog.dismiss()))
-                .show();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutAlertOkBinding binding = LayoutAlertOkBinding.inflate(inflater);
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(binding.getRoot());
+        binding.titleTextView.setText(title);
+        binding.messageTextView.setText(message);
+        binding.okButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            if (callback != null) {
+                callback.handler();
+            }
+        });
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    public static void showModalAlert(Context context, String title, String message) {
+        showDialog(context, title, message, null);
     }
 
     public static void showModalAlert(Context context, String title, String message, VoidCallback callback) {
-        if (message == null) {
-            message = "";
-        }
-        message = message.trim();
-        if ((context == null) || message.isEmpty()) {
-            return;
-        }
-        new AlertDialog.Builder(context)
-                .setCancelable(false)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(android.R.string.ok, ((dialog, w) -> {
-                    dialog.dismiss();
-                    if (callback != null) {
-                        callback.handler();
-                    }
-                }))
-                .show();
+        showDialog(context, title, message, callback);
     }
 
     public static void hideKeyboard(AppCompatActivity activity) {

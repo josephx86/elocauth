@@ -9,7 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.pixispace.elocauth.R;
@@ -21,8 +23,8 @@ import com.pixispace.elocauth.databinding.LayoutNavHeaderBinding;
 public class LandingActivity extends AppCompatActivity {
     private ActivityLandingBinding binding;
     private LayoutNavHeaderBinding navHeaderBinding;
-    private
-    UserAccountViewModel viewModel;
+    private UserAccountViewModel viewModel;
+    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +53,7 @@ public class LandingActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            if (binding.drawer.isOpen()) {
-                binding.drawer.close();
-            } else {
-                binding.drawer.open();
-            }
+            toggleDrawer();
             return true;
         } else if (id == R.id.mnu_refresh) {
             refresh();
@@ -66,15 +64,23 @@ public class LandingActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (binding.drawer.isOpen()) {
-            binding.drawer.close();
+            closeDrawer();
         } else {
             super.onBackPressed();
         }
     }
 
-    private void setupDrawer() {
-        binding.drawer.closeDrawers();
+    private void setToolbar() {
+        actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.menu);
+            actionBar.setHomeActionContentDescription(R.string.open_drawer_menu);
+        }
+    }
 
+    private void setupDrawer() {
+        closeDrawer();
         try {
             PackageManager pm = getPackageManager();
             PackageInfo info = pm.getPackageInfo(getPackageName(), 0);
@@ -100,21 +106,23 @@ public class LandingActivity extends AppCompatActivity {
 
     private void setListeners() {
         binding.navView.setNavigationItemSelectedListener(this::onNavItemSelected);
-        navHeaderBinding.backButton.setOnClickListener(v -> onBackPressed());
         navHeaderBinding.editButton.setOnClickListener(v -> editProfile());
+        binding.drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                restoreMenuIcon();
+            }
+        });
     }
 
     private void editProfile() {
-        if (binding.drawer.isOpen()) {
-            binding.drawer.close();
-        }
+        closeDrawer();
         ActivityHelper.open(this, ProfileActivity.class, false);
     }
 
     private boolean onNavItemSelected(MenuItem item) {
-        if (binding.drawer.isOpen()) {
-            binding.drawer.close();
-        }
+        closeDrawer();
 
         final int id = item.getItemId();
         if (id == R.id.mnu_sign_out) {
@@ -149,10 +157,6 @@ public class LandingActivity extends AppCompatActivity {
         navHeaderBinding = LayoutNavHeaderBinding.bind(header);
     }
 
-    private void setToolbar() {
-        setSupportActionBar(binding.toolbar);
-    }
-
     private void onSignOut() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
@@ -162,6 +166,38 @@ public class LandingActivity extends AppCompatActivity {
     private void signOut() {
         viewModel.signOut();
         onSignOut();
+    }
+
+    private void toggleDrawer() {
+        if (binding.drawer.isOpen()) {
+            closeDrawer();
+        } else {
+            openDrawer();
+        }
+    }
+
+    private void openDrawer() {
+        if (!binding.drawer.isOpen()) {
+            if (actionBar != null) {
+                actionBar.setHomeAsUpIndicator(0); // Show the 'Back/up' arrow
+                actionBar.setHomeActionContentDescription(R.string.close_drawer_menu);
+            }
+            binding.drawer.open();
+        }
+    }
+
+    private void closeDrawer() {
+        if (binding.drawer.isOpen()) {
+            restoreMenuIcon();
+            binding.drawer.close();
+        }
+    }
+
+    private void restoreMenuIcon() {
+        if (actionBar != null) {
+            actionBar.setHomeAsUpIndicator(R.drawable.menu);
+            actionBar.setHomeActionContentDescription(R.string.open_drawer_menu);
+        }
     }
 
     private void openAppPreferences() {
@@ -189,6 +225,7 @@ public class LandingActivity extends AppCompatActivity {
     }
 
     private void refresh() {
+        closeDrawer();
         // todo:
     }
 }

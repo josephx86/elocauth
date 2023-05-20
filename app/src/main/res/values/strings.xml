@@ -62,4 +62,11 @@
     <string name="browse_eloc_status">Browse ELOC status</string>
     <string name="preferences">Preferences</string>
     <string name="landing_page">Landing page</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="new_value">New value</string>
+    <string name="current_value">Current value:</string>
+    <string name="save">Save</string>
+    <string name="invalid_field_data">Invalid field data!</string>
+    <string name="open_drawer_menu">Open drawer menu</string>
+    <string name="close_drawer_menu">Close drawer menu</string>
 </resources>

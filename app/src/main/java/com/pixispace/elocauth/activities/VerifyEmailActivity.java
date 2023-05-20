@@ -3,7 +3,6 @@ package com.pixispace.elocauth.activities;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.pixispace.elocauth.R;
@@ -11,7 +10,7 @@ import com.pixispace.elocauth.callbacks.VoidCallback;
 import com.pixispace.elocauth.data.UserAccountViewModel;
 import com.pixispace.elocauth.databinding.ActivityVerifyEmailBinding;
 
-public class VerifyEmailActivity extends AppCompatActivity {
+public class VerifyEmailActivity extends NoActionBarActivity {
     private ActivityVerifyEmailBinding binding;
     private UserAccountViewModel viewModel;
 

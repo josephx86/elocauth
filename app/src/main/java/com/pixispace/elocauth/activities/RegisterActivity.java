@@ -5,14 +5,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.pixispace.elocauth.R;
 import com.pixispace.elocauth.data.UserAccountViewModel;
 import com.pixispace.elocauth.databinding.ActivityRegisterBinding;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends NoActionBarActivity {
     private ActivityRegisterBinding binding;
     private UserAccountViewModel viewModel;
 

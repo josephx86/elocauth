@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="auth_input_max_length">100</integer>
+    <integer name="display_name_max_length">50</integer>
+    <integer name="user_id_max_length">20</integer>
 </resources>

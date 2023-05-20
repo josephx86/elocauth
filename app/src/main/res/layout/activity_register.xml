@@ -22,7 +22,8 @@
         android:contentDescription="@string/go_back"
         android:padding="8dp"
         android:scaleType="fitXY"
-        android:src="@drawable/arrow_back" />
+        android:src="@drawable/arrow_back"
+        app:tint="#fff" />
 
     <View
         android:layout_width="match_parent"
@@ -33,7 +34,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:contentDescription="@string/app_logo"
-        android:src="@drawable/logo" />
+        android:src="@drawable/logo_dark" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -132,12 +133,12 @@
 
     <Button
         android:id="@+id/login_button"
+        style="@style/AppTextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="0dp"
         android:text="@string/sign_in_existing_account"
-        android:textAllCaps="true"
-        android:theme="@style/ThemeOverlay.Material3.Button.TextButton" />
+        android:textAllCaps="true" />
 
     <View
         android:layout_width="match_parent"

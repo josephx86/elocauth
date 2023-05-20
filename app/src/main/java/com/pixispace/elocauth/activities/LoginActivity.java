@@ -7,14 +7,13 @@ import android.view.View;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.pixispace.elocauth.R;
 import com.pixispace.elocauth.data.UserAccountViewModel;
 import com.pixispace.elocauth.databinding.ActivityLoginBinding;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends NoActionBarActivity {
     private ActivityLoginBinding binding;
     private ActivityResultLauncher<Intent> googleSignInLauncher;
     private UserAccountViewModel viewModel;

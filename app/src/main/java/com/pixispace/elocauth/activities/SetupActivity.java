@@ -25,7 +25,7 @@ import com.pixispace.elocauth.databinding.ActivitySetupBinding;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class SetupActivity extends AppCompatActivity {
+public class SetupActivity extends NoActionBarActivity {
     private ActivitySetupBinding binding;
     private ActivityResultLauncher<PickVisualMediaRequest> imagePicker;
     private ActivityResultLauncher<Intent> cameraLauncher;
