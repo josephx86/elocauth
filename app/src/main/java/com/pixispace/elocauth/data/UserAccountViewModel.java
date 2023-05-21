@@ -10,8 +10,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.pixispace.elocauth.callbacks.BooleanCallback;
-import com.pixispace.elocauth.callbacks.ProfileCallback;
 import com.pixispace.elocauth.callbacks.StringCallback;
+import com.pixispace.elocauth.callbacks.VoidCallback;
 
 import java.util.HashMap;
 
@@ -23,10 +23,6 @@ public class UserAccountViewModel extends AndroidViewModel {
     public UserAccountViewModel(@NonNull Application application) {
         super(application);
         repository = UserAccountRepository.getInstance();
-    }
-
-    public LiveData<String> getDisplayName() {
-        return repository.getDisplayName();
     }
 
     public String getEmailAddress() {
@@ -55,10 +51,6 @@ public class UserAccountViewModel extends AndroidViewModel {
 
     public boolean isSignedIn() {
         return repository.isSignedIn();
-    }
-
-    public void uploadProfilePicture(Bitmap bitmap, StringCallback callback) {
-        repository.uploadProfilePicture(bitmap, callback);
     }
 
     public void updateProfile(HashMap<String, Object> data, BooleanCallback callback) {
@@ -93,5 +85,16 @@ public class UserAccountViewModel extends AndroidViewModel {
         return userProfileLiveData;
     }
 
+    public void updateDisplayName(String name, VoidCallback callback) {
+        repository.updateDisplayName(name, callback);
+    }
+
+    public void uploadProfilePicture(Bitmap bitmap, StringCallback callback) {
+        repository.uploadProfilePicture(bitmap, callback);
+    }
+
+    public void updateProfilePicture(String url, VoidCallback callback) {
+        repository.updateProfilePicture(url, callback);
+    }
 
 }

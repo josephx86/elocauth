@@ -14,6 +14,7 @@
     <string name="verify_password">Verify password</string>
     <string name="go_back">Go back</string>
     <string name="email_address_is_required">Email address is required!</string>
+    <string name="required">Required!</string>
     <string name="login">Login</string>
     <string name="password_is_required">Password is required!</string>
     <string name="passwords_must_match">Passwords must match!</string>
@@ -69,4 +70,6 @@
     <string name="invalid_field_data">Invalid field data!</string>
     <string name="open_drawer_menu">Open drawer menu</string>
     <string name="close_drawer_menu">Close drawer menu</string>
+    <string name="saving">Saving…</string>
+    <string name="upload_profile_picture_error">Failed to upload profile picture!</string>
 </resources>

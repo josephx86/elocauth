@@ -8,6 +8,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Source;
 import com.pixispace.elocauth.callbacks.BooleanCallback;
 import com.pixispace.elocauth.callbacks.ProfileCallback;
+import com.pixispace.elocauth.callbacks.VoidCallback;
 import com.pixispace.elocauth.data.UserAccountRepository;
 import com.pixispace.elocauth.data.UserProfile;
 
@@ -34,21 +35,43 @@ public class FirestoreHelper {
         accountsNode = firestore.collection("accounts");
     }
 
-    public void setDisplayName(String val, UserAccountRepository repository) {
-        // todo
-        if (repository == null) {
+    public void updateDisplayName(String name, String id, VoidCallback callback) {
+        updateProfileField(name, FIELD_DISPLAY_NAME, id, callback);
+    }
+
+    public void updateProfilePicture(String url, String id, VoidCallback callback) {
+        updateProfileField(url, FIELD_PROFILE_PICTURE, id, callback);
+    }
+
+    private void updateProfileField(String value, String fieldName, String id, VoidCallback callback) {
+        final VoidCallback caller = () -> {
+            if (callback != null) {
+                callback.handler();
+            }
+        };
+
+        if (id == null) {
+            id = "";
+        }
+        id = id.trim();
+        if (id.isEmpty()) {
+            caller.handler();
             return;
         }
-        if (val == null) {
-            val = "";
+
+        if (value == null) {
+            value = "";
         }
-        final String displayName = val.trim();
+        final String finalValue = value.trim();
+        if (finalValue.isEmpty()) {
+            caller.handler();
+            return;
+        }
+
         HashMap<String, Object> data = new HashMap<>();
-        data.put(FIELD_DISPLAY_NAME, val);
-        accountsNode.document(repository.getEmailAddress()).update(data).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                repository.setDisplayNameCompleted(displayName);
-            }
+        data.put(fieldName, finalValue);
+        accountsNode.document(id).update(data).addOnCompleteListener(task -> {
+            caller.handler();
         });
     }
 

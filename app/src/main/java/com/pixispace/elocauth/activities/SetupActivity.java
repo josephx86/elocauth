@@ -2,7 +2,6 @@ package com.pixispace.elocauth.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,7 +12,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.pixispace.elocauth.R;
@@ -25,7 +23,7 @@ import com.pixispace.elocauth.databinding.ActivitySetupBinding;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class SetupActivity extends NoActionBarActivity {
+public class SetupActivity extends NoActionBarActivity implements MediaActivity {
     private ActivitySetupBinding binding;
     private ActivityResultLauncher<PickVisualMediaRequest> imagePicker;
     private ActivityResultLauncher<Intent> cameraLauncher;
@@ -47,6 +45,34 @@ public class SetupActivity extends NoActionBarActivity {
         updateUI(false);
     }
 
+    @Override
+    public void takePhoto() {
+        photoUri = DataHelper.getTempFileUri();
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+        cameraLauncher.launch(intent);
+    }
+
+    @Override
+    public void pickImage() {
+        imagePicker.launch(ActivityHelper.getPickImageRequest());
+    }
+
+    @Override
+    public void setImage(Uri src) {
+        avatar = null;
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), src);
+            bitmap = downScaleAvatar(bitmap);
+            if (bitmap != null) {
+                avatar = bitmap;
+            }
+        } catch (IOException ignore) {
+        }
+        binding.avatarImageView.setImageBitmap(avatar);
+    }
+
     private void setTextWatchers() {
         binding.displayNameTextInput.addTextChangedListener(new TextInputWatcher(binding.displayNameLayout));
         binding.userIdTextInput.addTextChangedListener(new TextInputWatcher(binding.userIdLayout));
@@ -57,21 +83,6 @@ public class SetupActivity extends NoActionBarActivity {
         binding.cameraButton.setOnClickListener(v -> takePhoto());
         binding.root.setOnClickListener(v -> ActivityHelper.hideKeyboard(this));
         binding.doneButton.setOnClickListener(v -> saveProfile());
-    }
-
-    private void takePhoto() {
-        photoUri = DataHelper.getTempFileUri();
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-        cameraLauncher.launch(intent);
-    }
-
-    private void pickImage() {
-        PickVisualMediaRequest request = new PickVisualMediaRequest.Builder()
-                .setMediaType(PickVisualMedia.ImageOnly.INSTANCE)
-                .build();
-        imagePicker.launch(request);
     }
 
     private void setLaunchers() {
@@ -90,33 +101,6 @@ public class SetupActivity extends NoActionBarActivity {
                 }
             }
         });
-    }
-
-    private void setImage(Uri src) {
-        avatar = null;
-        try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), src);
-            bitmap = downScaleAvatar(bitmap);
-            if (bitmap != null) {
-                avatar = bitmap;
-            }
-        } catch (IOException ignore) {
-        }
-        binding.avatarImageView.setImageBitmap(avatar);
-    }
-
-    private Bitmap downScaleAvatar(Bitmap bitmap) {
-        final int maxDimension = 800;
-        int bitmapHeight = bitmap.getHeight();
-        int bitmapWidth = bitmap.getWidth();
-        int bigDimension = Math.max(bitmapWidth, bitmapHeight);
-        if (bigDimension > maxDimension) {
-            float scaleFactor = (float) maxDimension / bigDimension;
-            Matrix matrix = new Matrix();
-            matrix.setScale(scaleFactor, scaleFactor);
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth, bitmapHeight, matrix, false);
-        }
-        return bitmap;
     }
 
     private void updateUI(boolean lock) {

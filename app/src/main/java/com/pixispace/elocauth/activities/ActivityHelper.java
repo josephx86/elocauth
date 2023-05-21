@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.pixispace.elocauth.callbacks.VoidCallback;
@@ -73,5 +75,12 @@ public class ActivityHelper {
                 }
             }
         }
+    }
+
+    public static PickVisualMediaRequest getPickImageRequest() {
+        return new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build();
+
     }
 }

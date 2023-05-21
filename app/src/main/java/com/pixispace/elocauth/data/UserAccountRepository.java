@@ -3,14 +3,12 @@ package com.pixispace.elocauth.data;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.pixispace.elocauth.callbacks.BooleanCallback;
 import com.pixispace.elocauth.callbacks.ProfileCallback;
 import com.pixispace.elocauth.callbacks.StringCallback;
+import com.pixispace.elocauth.callbacks.VoidCallback;
 import com.pixispace.elocauth.data.firebase.AuthHelper;
 import com.pixispace.elocauth.data.firebase.FirestoreHelper;
 import com.pixispace.elocauth.data.firebase.StorageHelper;
@@ -23,9 +21,6 @@ public class UserAccountRepository {
     private final AuthHelper authHelper;
     private final StorageHelper storageHelper;
     private static UserAccountRepository instance;
-    private final MutableLiveData<String> displayName = new MutableLiveData<>();
-
-    private long confirmationEmailTimestamp = 0;
 
     static UserAccountRepository getInstance() {
         if (instance == null) {
@@ -38,14 +33,6 @@ public class UserAccountRepository {
         firestoreHelper = FirestoreHelper.getInstance();
         authHelper = AuthHelper.getInstance();
         storageHelper = StorageHelper.getInstance();
-    }
-
-    LiveData<String> getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayNameCompleted(String name) {
-        displayName.setValue(name);
     }
 
     public String getEmailAddress() {
@@ -81,11 +68,6 @@ public class UserAccountRepository {
         authHelper.register(email, password, callback);
     }
 
-    void uploadProfilePicture(Bitmap bitmap, StringCallback callback) {
-        String id = authHelper.getUserId();
-        storageHelper.uploadProfilePicture(id, bitmap, callback);
-    }
-
     void updateProfile(HashMap<String, Object> data, BooleanCallback callback) {
         String id = authHelper.getUserId();
         firestoreHelper.updateProfile(id, data, callback);
@@ -116,5 +98,20 @@ public class UserAccountRepository {
         String id = authHelper.getUserId();
         String emailAddress = getEmailAddress();
         firestoreHelper.getProfile(id, emailAddress, callback);
+    }
+
+    void updateDisplayName(String name, VoidCallback callback) {
+        String id = authHelper.getUserId();
+        firestoreHelper.updateDisplayName(name, id, callback);
+    }
+
+    void uploadProfilePicture(Bitmap bitmap, StringCallback callback) {
+        String id = authHelper.getUserId();
+        storageHelper.uploadProfilePicture(id, bitmap, callback);
+    }
+
+    void updateProfilePicture(String url, final VoidCallback callback) {
+        String id = authHelper.getUserId();
+        firestoreHelper.updateProfilePicture(url, id, callback);
     }
 }

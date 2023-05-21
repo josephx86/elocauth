@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.view.MenuItem;
 
@@ -44,7 +45,9 @@ public class TextEditorActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(fieldData.getFieldName());
+            if (fieldData != null) {
+                actionBar.setTitle(fieldData.getFieldName());
+            }
         }
     }
 
@@ -58,10 +61,8 @@ public class TextEditorActivity extends AppCompatActivity {
             }
         }
         if (fieldData == null) {
-            Intent intent = new Intent();
-            intent.putExtra(RESULT_MESSAGE, getString(R.string.invalid_field_data));
-            setResult(RESULT_CANCELED, intent);
-            onBackPressed();
+            String message = getString(R.string.invalid_field_data);
+            goBack(message, false);
         } else {
             binding.currentValueTextView.setText(fieldData.getCurrentValue());
             binding.textEditLayout.setCounterMaxLength(fieldData.getMaxLength());
@@ -84,5 +85,24 @@ public class TextEditorActivity extends AppCompatActivity {
     private void save() {
         ActivityHelper.hideKeyboard(this);
         binding.textEditLayout.setError(null);
+
+        String newValue = "";
+        Editable editable = binding.editText.getEditableText();
+        if (editable != null) {
+            newValue = editable.toString().trim();
+        }
+        if (newValue.isEmpty()) {
+            binding.textEditLayout.setError(getString(R.string.required));
+            return;
+        }
+
+        goBack(newValue, true);
+    }
+
+    private void goBack(String data, boolean success) {
+        Intent intent = new Intent();
+        intent.putExtra(RESULT_MESSAGE, data);
+        setResult(success ? RESULT_OK : RESULT_CANCELED, intent);
+        onBackPressed();
     }
 }
