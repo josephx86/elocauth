@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -128,6 +127,9 @@ public class ProfileActivity extends AppCompatActivity implements MediaActivity 
 
     private void setItemTitles() {
         binding.displayNameItem.titleTextView.setText(R.string.your_name);
+        binding.userIdItem.titleTextView.setText(R.string.user_id);
+        binding.userIdItem.chevron.setVisibility(View.GONE);
+        binding.userIdItem.button.setBackground(null);
     }
 
     private void setItemValues(UserProfile profile) {
@@ -138,6 +140,7 @@ public class ProfileActivity extends AppCompatActivity implements MediaActivity 
                 profile.getProfilePictureUrl(),
                 HttpHelper.getInstance().getImageLoader()
         );
+        binding.userIdItem.valueTextView.setText(profile.getUserId());
     }
 
     private void processChange(ActivityResult result) {

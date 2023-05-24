@@ -64,6 +64,7 @@ public class RegisterActivity extends NoActionBarActivity {
             return;
         }
 
+        final int passwordMinLength = getResources().getInteger(R.integer.password_min_length);
         String password = "";
         editable = binding.passwordTextInput.getEditableText();
         if (editable != null) {
@@ -73,7 +74,7 @@ public class RegisterActivity extends NoActionBarActivity {
             binding.passwordLayout.setError(getString(R.string.password_is_required));
             binding.passwordTextInput.requestFocus();
             return;
-        } else if (password.length() < 8) {
+        } else if (password.length() < passwordMinLength) {
             binding.passwordLayout.setError(getString(R.string.password_too_short));
             binding.passwordTextInput.requestFocus();
             return;

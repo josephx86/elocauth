@@ -56,6 +56,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.8"
+            android:ellipsize="marquee"
+            android:singleLine="true"
             tools:text="johndoe@gmail.com" />
 
         <TextView
@@ -63,7 +65,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.8"
-            tools:text="User ID: jd7899" />
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            tools:text="ID: jd7899" />
 
         <Button
             android:id="@+id/edit_button"

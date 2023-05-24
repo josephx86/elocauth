@@ -103,6 +103,10 @@
                 android:layout_marginVertical="16dp" />
 
             <include
+                android:id="@+id/user_id_item"
+                layout="@layout/layout_profile_item" />
+
+            <include
                 android:id="@+id/display_name_item"
                 layout="@layout/layout_profile_item" />
         </LinearLayout>

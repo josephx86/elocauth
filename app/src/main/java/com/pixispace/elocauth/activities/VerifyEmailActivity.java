@@ -32,6 +32,10 @@ public class VerifyEmailActivity extends NoActionBarActivity {
     private void setListeners() {
         binding.verifiedButton.setOnClickListener(v -> signIn());
         binding.resendButton.setOnClickListener(v -> viewModel.sendEmailVerificationLink(this::onResendCompleted));
+        binding.signOutButton.setOnClickListener(v -> {
+            viewModel.signOut();
+            ActivityHelper.open(this, LoginActivity.class, true);
+        });
     }
 
     private void updateUI(boolean showProgress) {

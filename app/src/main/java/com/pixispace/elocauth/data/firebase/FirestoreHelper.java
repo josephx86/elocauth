@@ -188,4 +188,25 @@ public class FirestoreHelper {
                     });
         }
     }
+
+    public void deleteProfile(String documentId, BooleanCallback callback) {
+        final BooleanCallback caller = b -> {
+            if (callback != null) {
+                callback.handler(b);
+            }
+        };
+
+        if (documentId == null) {
+            documentId = "";
+        }
+        documentId = documentId.trim();
+        if (documentId.isEmpty()) {
+            caller.handler(false);
+        } else {
+            accountsNode
+                    .document(documentId)
+                    .delete()
+                    .addOnCompleteListener(task -> caller.handler(task.isSuccessful()));
+        }
+    }
 }

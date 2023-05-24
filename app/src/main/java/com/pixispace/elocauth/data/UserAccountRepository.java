@@ -114,4 +114,30 @@ public class UserAccountRepository {
         String id = authHelper.getUserId();
         firestoreHelper.updateProfilePicture(url, id, callback);
     }
+
+    void changeEmailAddress(String emailAddress, String password, StringCallback callback) {
+        authHelper.changeEmailAddress(emailAddress, password, callback);
+    }
+
+    void changePassword(String newPassword, String oldPassword, StringCallback callback) {
+        authHelper.changePassword(newPassword, oldPassword, callback);
+    }
+
+    void deleteRemoteFiles(BooleanCallback callback) {
+        String id = authHelper.getUserId();
+        storageHelper.deleteAccount(id, callback);
+    }
+
+    void deleteProfile(BooleanCallback callback) {
+        String id = authHelper.getUserId();
+        firestoreHelper.deleteProfile(id, callback);
+    }
+
+    void deleteAuthAccount(BooleanCallback callback) {
+        authHelper.deleteAccount(callback);
+    }
+
+    void verifyPassword(String password, StringCallback callback) {
+        authHelper.reauthenticate(password, callback);
+    }
 }

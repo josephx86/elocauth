@@ -22,13 +22,17 @@
 
     <group android:id="@+id/group2">
         <item
+            android:id="@+id/mnu_preferences"
+            android:icon="@drawable/settings"
+            android:title="@string/preferences" />
+        <item
             android:id="@+id/mnu_bluetooth_settings"
             android:icon="@drawable/bluetooth"
             android:title="@string/bluetooth_settings" />
         <item
-            android:id="@+id/mnu_preferences"
-            android:icon="@drawable/settings"
-            android:title="@string/preferences" />
+            android:id="@+id/mnu_account"
+            android:icon="@drawable/person"
+            android:title="@string/account_settings" />
     </group>
     <item
         android:id="@+id/mnu_sign_out"

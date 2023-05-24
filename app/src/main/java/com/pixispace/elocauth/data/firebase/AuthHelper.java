@@ -11,9 +11,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.ActionCodeSettings;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -48,11 +50,15 @@ public class AuthHelper {
         googleSignInClient = GoogleSignIn.getClient(context, signInOptions);
     }
 
+    private FirebaseUser getUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
     public void register(String email, String password, StringCallback callback) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                FirebaseUser user = auth.getCurrentUser();
+                FirebaseUser user = getUser();
                 if (user != null) {
                     user.sendEmailVerification().addOnCompleteListener(verificationTask -> {
                         if (callback != null) {
@@ -81,7 +87,7 @@ public class AuthHelper {
                 Context context = ElocAuthApp.getInstance();
                 Exception exception = task.getException();
                 error = context.getString(R.string.something_went_wrong);
-                if (exception instanceof FirebaseAuthInvalidCredentialsException) {
+                if ((exception instanceof FirebaseAuthInvalidCredentialsException) || (exception instanceof FirebaseAuthInvalidUserException)) {
                     error = context.getString(R.string.invalid_email_address_or_password);
                 } else if (exception != null) {
                     error = exception.getMessage();
@@ -123,12 +129,12 @@ public class AuthHelper {
     }
 
     public boolean isSignedIn() {
-        return (FirebaseAuth.getInstance().getCurrentUser() != null);
+        return (getUser() != null);
     }
 
     public String getEmailAddress() {
         String emailAddress = "";
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = getUser();
         if (user != null) {
             emailAddress = user.getEmail();
         }
@@ -137,7 +143,7 @@ public class AuthHelper {
 
     public String getUserId() {
         String id = "no_id";
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = getUser();
         if (user != null) {
             id = user.getUid();
         }
@@ -161,7 +167,7 @@ public class AuthHelper {
     }
 
     public void sendVerificationLink(BooleanCallback callback) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = getUser();
         if (user != null) {
             user.sendEmailVerification().addOnCompleteListener(task -> {
                 if (callback != null) {
@@ -172,6 +178,155 @@ public class AuthHelper {
             if (callback != null) {
                 callback.handler(false);
             }
+        }
+    }
+
+    private String getDefaultErrorMessage() {
+        final Context context = ElocAuthApp.getInstance();
+        return context.getString(R.string.something_went_wrong);
+    }
+
+    private String getString(int resId) {
+        String s = "";
+        try {
+            s = ElocAuthApp.getInstance().getString(resId);
+        } catch (Exception ignore) {
+
+        }
+        return s;
+    }
+
+    public void reauthenticate(String password, StringCallback callback) {
+        StringCallback caller = s -> {
+            if (callback != null) {
+                callback.handler(s);
+            }
+        };
+
+        FirebaseUser user = getUser();
+        if (user == null) {
+            caller.handler(getDefaultErrorMessage());
+        } else {
+            AuthCredential credential = EmailAuthProvider.getCredential(getEmailAddress(), password);
+            user.reauthenticate(credential).addOnCompleteListener(task -> {
+                String error = "";
+                if (!task.isSuccessful()) {
+                    error = getString(R.string.invalid_password);
+                }
+                caller.handler(error);
+            });
+        }
+    }
+
+    public void changeEmailAddress(String newEmailAddress, String password, StringCallback callback) {
+        reauthenticate(password, error -> {
+            if (error == null) {
+                error = "";
+            }
+            error = error.trim();
+            if (error.isEmpty()) {
+                changeEmailAfterReauth(newEmailAddress, callback);
+            } else {
+                if (callback != null) {
+                    callback.handler(error);
+                }
+            }
+        });
+    }
+
+    private void changeEmailAfterReauth(String newEmailAddress, StringCallback callback) {
+        final Context context = ElocAuthApp.getInstance();
+        String defaultMessage = context.getString(R.string.something_went_wrong);
+        StringCallback caller = s -> {
+            if (callback != null) {
+                callback.handler(s);
+            }
+        };
+        final FirebaseUser user = getUser();
+        if (user == null) {
+            caller.handler(defaultMessage);
+        } else {
+            user
+                    .updateEmail(newEmailAddress)
+                    .addOnCompleteListener(
+                            task -> {
+                                String error = "";
+                                if (task.isSuccessful()) {
+                                    if (!user.isEmailVerified()) {
+                                        user.sendEmailVerification();
+                                    }
+                                } else {
+                                    Exception exception = task.getException();
+                                    if (exception != null) {
+                                        error = exception.getLocalizedMessage();
+                                    }
+                                    if ((error != null) && error.toLowerCase().contains("invalid")) {
+                                        error = context.getString(R.string.invalid_email_address);
+                                    }
+                                }
+                                caller.handler(error);
+                            }
+                    );
+        }
+    }
+
+    public void changePassword(String newPassword, String oldPassword, StringCallback callback) {
+        reauthenticate(oldPassword, error -> {
+            if (error == null) {
+                error = "";
+            }
+            error = error.trim();
+            if (error.isEmpty()) {
+                changePasswordAfterReauth(newPassword, callback);
+            } else {
+                if (callback != null) {
+                    callback.handler(error);
+                }
+            }
+        });
+    }
+
+    private void changePasswordAfterReauth(String newPassword, StringCallback callback) {
+        final Context context = ElocAuthApp.getInstance();
+        String defaultMessage = context.getString(R.string.something_went_wrong);
+        StringCallback caller = s -> {
+            if (callback != null) {
+                callback.handler(s);
+            }
+        };
+        FirebaseUser user = getUser();
+        if (user == null) {
+            caller.handler(defaultMessage);
+        } else {
+            user
+                    .updatePassword(newPassword)
+                    .addOnCompleteListener(
+                            task -> {
+                                String error = "";
+                                if (!task.isSuccessful()) {
+                                    Exception exception = task.getException();
+                                    if (exception != null) {
+                                        error = exception.getLocalizedMessage();
+                                    }
+                                }
+                                caller.handler(error);
+                            }
+                    );
+        }
+    }
+
+    public void deleteAccount(BooleanCallback callback) {
+        final BooleanCallback caller = b -> {
+            if (callback != null) {
+                callback.handler(b);
+            }
+        };
+
+        FirebaseUser user = getUser();
+        if (user == null) {
+            caller.handler(false);
+        } else {
+            user.delete().addOnCompleteListener(task -> caller.handler(task.isSuccessful()));
         }
     }
 }

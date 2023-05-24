@@ -121,6 +121,11 @@ public class LandingActivity extends AppCompatActivity {
         ActivityHelper.open(this, ProfileActivity.class, false);
     }
 
+    private void editAccount() {
+        closeDrawer();
+        ActivityHelper.open(this, AccountActivity.class, false);
+    }
+
     private boolean onNavItemSelected(MenuItem item) {
         closeDrawer();
 
@@ -145,6 +150,9 @@ public class LandingActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.mnu_sync_clock) {
             synchronizeClock();
+            return true;
+        } else if (id == R.id.mnu_account) {
+            editAccount();
             return true;
         } else {
             return false;

@@ -97,4 +97,27 @@ public class UserAccountViewModel extends AndroidViewModel {
         repository.updateProfilePicture(url, callback);
     }
 
+    public void changeEmailAddress(String emailAddress, String password, StringCallback callback) {
+        repository.changeEmailAddress(emailAddress, password, callback);
+    }
+
+    public void changePassword(String newPassword, String oldPassword, StringCallback callback) {
+        repository.changePassword(newPassword, oldPassword, callback);
+    }
+
+    public void deleteRemoteFiles(BooleanCallback callback) {
+        repository.deleteRemoteFiles(callback);
+    }
+
+    public void deleteProfile(BooleanCallback callback) {
+        repository.deleteProfile(callback);
+    }
+
+    public void deleteAuthAccount(BooleanCallback callback) {
+        repository.deleteAuthAccount(callback);
+    }
+
+    public void verifyPassword(String password, StringCallback callback) {
+        repository.verifyPassword(password, callback);
+    }
 }
