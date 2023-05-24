@@ -252,9 +252,7 @@ public class AuthHelper {
                             task -> {
                                 String error = "";
                                 if (task.isSuccessful()) {
-                                    if (!user.isEmailVerified()) {
-                                        user.sendEmailVerification();
-                                    }
+                                    user.sendEmailVerification();
                                 } else {
                                     Exception exception = task.getException();
                                     if (exception != null) {
