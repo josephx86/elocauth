@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +15,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.pixispace.elocauth.R;
 import com.pixispace.elocauth.data.HttpHelper;
 import com.pixispace.elocauth.data.UserAccountViewModel;
@@ -35,6 +39,7 @@ public class LandingActivity extends AppCompatActivity {
         setListeners();
         setToolbar();
         setupDrawer();
+        binding.stopButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -56,7 +61,10 @@ public class LandingActivity extends AppCompatActivity {
             toggleDrawer();
             return true;
         } else if (id == R.id.mnu_refresh) {
-            refresh();
+            if (!binding.swipeRefreshLayout.isRefreshing()) {
+                binding.swipeRefreshLayout.setRefreshing(true);
+                refresh();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -105,6 +113,7 @@ public class LandingActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
+        binding.swipeRefreshLayout.setOnRefreshListener(this::refresh);
         binding.navView.setNavigationItemSelectedListener(this::onNavItemSelected);
         navHeaderBinding.editButton.setOnClickListener(v -> editProfile());
         binding.drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
@@ -234,6 +243,19 @@ public class LandingActivity extends AppCompatActivity {
 
     private void refresh() {
         closeDrawer();
+        binding.stopButton.setVisibility(View.VISIBLE);
+
         // todo:
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(() -> {
+                    binding.swipeRefreshLayout.setRefreshing(false);
+                    binding.stopButton.setVisibility(View.GONE);
+                    Snackbar.make(binding.getRoot(), "Update complete", Snackbar.LENGTH_LONG).show();
+                },
+                3000
+        );
+
+
     }
 }
