@@ -34,6 +34,12 @@
             android:icon="@drawable/person"
             android:title="@string/account_settings" />
     </group>
+    <group android:id="@+id/group3">
+        <item
+            android:id="@+id/mnu_about"
+            android:icon="@drawable/info"
+            android:title="@string/about_app" />
+    </group>
     <item
         android:id="@+id/mnu_sign_out"
         android:icon="@drawable/logout"

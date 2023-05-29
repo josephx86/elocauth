@@ -36,7 +36,7 @@ public class LandingActivity extends AppCompatActivity {
         setViewModel();
         setListeners();
         setToolbar();
-        setupDrawer();
+        closeDrawer();
     }
 
     @Override
@@ -70,17 +70,6 @@ public class LandingActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.menu);
             actionBar.setHomeActionContentDescription(R.string.open_drawer_menu);
-        }
-    }
-
-    private void setupDrawer() {
-        closeDrawer();
-        try {
-            PackageManager pm = getPackageManager();
-            PackageInfo info = pm.getPackageInfo(getPackageName(), 0);
-            binding.versionTextView.setText(info.versionName);
-        } catch (PackageManager.NameNotFoundException ignore) {
-
         }
     }
 
@@ -153,8 +142,23 @@ public class LandingActivity extends AppCompatActivity {
         } else if (id == R.id.mnu_account) {
             editAccount();
             return true;
+        } else if (id == R.id.mnu_about) {
+            showAboutApp();
+            return true;
         } else {
             return false;
+        }
+    }
+
+    private void showAboutApp() {
+        try {
+            PackageManager pm = getPackageManager();
+            PackageInfo info = pm.getPackageInfo(getPackageName(), 0);
+            String title = getString(R.string.app_name);
+            String message = getString(R.string.version_template, info.versionName);
+            ActivityHelper.showModalAlert(this, title, message);
+        } catch (PackageManager.NameNotFoundException ignore) {
+
         }
     }
 

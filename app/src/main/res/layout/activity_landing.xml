@@ -41,19 +41,5 @@
         android:layout_gravity="start"
         app:drawerLayoutCornerSize="0dp"
         app:headerLayout="@layout/layout_nav_header"
-        app:menu="@menu/nav_menu">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_margin="16dp">
-
-            <TextView
-                android:id="@+id/version_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="v 1.2.3" />
-        </LinearLayout>
-    </com.google.android.material.navigation.NavigationView>
+        app:menu="@menu/nav_menu"/>
 </androidx.drawerlayout.widget.DrawerLayout>

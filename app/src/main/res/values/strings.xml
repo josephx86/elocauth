@@ -92,4 +92,6 @@
     <string name="failed_to_remove_account">Failed to remove account!</string>
     <string name="user_id">User ID:</string>
     <string name="stop">Stop</string>
+    <string name="about_app">About app</string>
+    <string name="version_template">Version: %s</string>
 </resources>
