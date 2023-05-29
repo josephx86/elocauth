@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -38,7 +37,6 @@ public class LandingActivity extends AppCompatActivity {
         setListeners();
         setToolbar();
         setupDrawer();
-        binding.stopButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -48,22 +46,11 @@ public class LandingActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             toggleDrawer();
             return true;
-        } else if (id == R.id.mnu_refresh) {
-            if (!binding.swipeRefreshLayout.isRefreshing()) {
-                binding.swipeRefreshLayout.setRefreshing(true);
-                refresh();
-            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -118,6 +105,12 @@ public class LandingActivity extends AppCompatActivity {
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 restoreMenuIcon();
+            }
+        });
+        binding.refreshButton.setOnClickListener(v -> {
+            if (!binding.swipeRefreshLayout.isRefreshing()) {
+                binding.swipeRefreshLayout.setRefreshing(true);
+                refresh();
             }
         });
     }
@@ -240,19 +233,17 @@ public class LandingActivity extends AppCompatActivity {
 
     private void refresh() {
         closeDrawer();
-        binding.stopButton.setVisibility(View.VISIBLE);
+        binding.refreshButton.setText(R.string.stop);
 
         // todo:
 
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(() -> {
                     binding.swipeRefreshLayout.setRefreshing(false);
-                    binding.stopButton.setVisibility(View.GONE);
+                    binding.refreshButton.setText(R.string.refresh);
                     Snackbar.make(binding.getRoot(), "Update complete", Snackbar.LENGTH_LONG).show();
                 },
                 3000
         );
-
-
     }
 }
