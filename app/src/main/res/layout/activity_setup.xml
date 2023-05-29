@@ -77,30 +77,6 @@
         app:tint="#fff" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/display_name_layout"
-        style="@style/Widget.Material3.TextInputLayout.FilledBox"
-        android:layout_width="@dimen/auth_input_width"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        app:boxBackgroundColor="@android:color/transparent"
-        app:counterEnabled="true"
-        app:counterMaxLength="@integer/display_name_max_length"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/avatar_frame_layout">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/display_name_text_input"
-            android:layout_width="@dimen/auth_input_width"
-            android:layout_height="wrap_content"
-            android:hint="@string/your_name"
-            android:imeOptions="actionNext"
-            android:inputType="textPersonName"
-            android:maxLength="@integer/display_name_max_length" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/user_id_layout"
         style="@style/Widget.Material3.TextInputLayout.FilledBox"
         android:layout_width="@dimen/auth_input_width"
@@ -112,7 +88,7 @@
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/display_name_layout">
+        app:layout_constraintTop_toBottomOf="@id/avatar_frame_layout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/user_id_text_input"

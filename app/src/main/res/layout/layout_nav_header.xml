@@ -29,6 +29,7 @@
                 android:background="@drawable/person"
                 android:contentDescription="@string/profile_picture"
                 android:scaleType="centerCrop"
+                tools:background="@tools:sample/avatars"
                 android:src="@drawable/person" />
         </androidx.cardview.widget.CardView>
     </FrameLayout>
@@ -45,11 +46,11 @@
         app:layout_constraintTop_toTopOf="@id/profile_picture_frame_layout">
 
         <TextView
-            android:id="@+id/display_name_text_view"
+            android:id="@+id/user_id_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            tools:text="John Doe" />
+            tools:text="@tools:sample/full_names" />
 
         <TextView
             android:id="@+id/email_address_text_view"
@@ -58,16 +59,7 @@
             android:alpha="0.8"
             android:ellipsize="marquee"
             android:singleLine="true"
-            tools:text="johndoe@gmail.com" />
-
-        <TextView
-            android:id="@+id/user_id_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0.8"
-            android:ellipsize="marquee"
-            android:singleLine="true"
-            tools:text="ID: jd7899" />
+            tools:text="jane.doe@gmail.com" />
 
         <Button
             android:id="@+id/edit_button"

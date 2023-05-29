@@ -85,10 +85,6 @@ public class UserAccountViewModel extends AndroidViewModel {
         return userProfileLiveData;
     }
 
-    public void updateDisplayName(String name, VoidCallback callback) {
-        repository.updateDisplayName(name, callback);
-    }
-
     public void uploadProfilePicture(Bitmap bitmap, StringCallback callback) {
         repository.uploadProfilePicture(bitmap, callback);
     }

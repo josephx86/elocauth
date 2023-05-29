@@ -100,11 +100,6 @@ public class UserAccountRepository {
         firestoreHelper.getProfile(id, emailAddress, callback);
     }
 
-    void updateDisplayName(String name, VoidCallback callback) {
-        String id = authHelper.getUserId();
-        firestoreHelper.updateDisplayName(name, id, callback);
-    }
-
     void uploadProfilePicture(Bitmap bitmap, StringCallback callback) {
         String id = authHelper.getUserId();
         storageHelper.uploadProfilePicture(id, bitmap, callback);

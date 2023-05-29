@@ -9,7 +9,6 @@ import com.google.firebase.firestore.Source;
 import com.pixispace.elocauth.callbacks.BooleanCallback;
 import com.pixispace.elocauth.callbacks.ProfileCallback;
 import com.pixispace.elocauth.callbacks.VoidCallback;
-import com.pixispace.elocauth.data.UserAccountRepository;
 import com.pixispace.elocauth.data.UserProfile;
 
 import java.util.HashMap;
@@ -20,7 +19,6 @@ public class FirestoreHelper {
 
     private static FirestoreHelper instance;
     public static String FIELD_PROFILE_PICTURE = "profile_picture";
-    public static String FIELD_DISPLAY_NAME = "display_name";
     public static String FIELD_USER_ID = "user_id";
 
     public static FirestoreHelper getInstance() {
@@ -33,10 +31,6 @@ public class FirestoreHelper {
     private FirestoreHelper() {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         accountsNode = firestore.collection("accounts");
-    }
-
-    public void updateDisplayName(String name, String id, VoidCallback callback) {
-        updateProfileField(name, FIELD_DISPLAY_NAME, id, callback);
     }
 
     public void updateProfilePicture(String url, String id, VoidCallback callback) {
@@ -70,9 +64,7 @@ public class FirestoreHelper {
 
         HashMap<String, Object> data = new HashMap<>();
         data.put(fieldName, finalValue);
-        accountsNode.document(id).update(data).addOnCompleteListener(task -> {
-            caller.handler();
-        });
+        accountsNode.document(id).update(data).addOnCompleteListener(task -> caller.handler());
     }
 
     public void updateProfile(String id, HashMap<String, Object> data, BooleanCallback callback) {
@@ -174,11 +166,9 @@ public class FirestoreHelper {
                         UserProfile profile = null;
                         if (task.isSuccessful()) {
                             DocumentSnapshot snapshot = task.getResult();
-                            String displayName = snapshot.get(FIELD_DISPLAY_NAME, String.class);
                             String profilePictureUrl = snapshot.get(FIELD_PROFILE_PICTURE, String.class);
                             String userId = snapshot.get(FIELD_USER_ID, String.class);
                             profile = new UserProfile(userId);
-                            profile.setDisplayName(displayName);
                             profile.setProfilePictureUrl(profilePictureUrl);
                             profile.setEmailAddress(emailAddress);
                         }

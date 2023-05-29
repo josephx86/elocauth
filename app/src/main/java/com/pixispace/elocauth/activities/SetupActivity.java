@@ -74,7 +74,6 @@ public class SetupActivity extends NoActionBarActivity implements MediaActivity 
     }
 
     private void setTextWatchers() {
-        binding.displayNameTextInput.addTextChangedListener(new TextInputWatcher(binding.displayNameLayout));
         binding.userIdTextInput.addTextChangedListener(new TextInputWatcher(binding.userIdLayout));
     }
 
@@ -107,7 +106,6 @@ public class SetupActivity extends NoActionBarActivity implements MediaActivity 
         if (lock) {
             binding.cameraButton.setEnabled(false);
             binding.galleryButton.setEnabled(false);
-            binding.displayNameLayout.setEnabled(false);
             binding.userIdLayout.setEnabled(false);
             binding.progressHorizontal.setVisibility(View.VISIBLE);
             binding.doneButton.setVisibility(View.INVISIBLE);
@@ -116,7 +114,6 @@ public class SetupActivity extends NoActionBarActivity implements MediaActivity 
         } else {
             binding.cameraButton.setEnabled(true);
             binding.galleryButton.setEnabled(true);
-            binding.displayNameLayout.setEnabled(true);
             binding.userIdLayout.setEnabled(true);
             binding.progressHorizontal.setVisibility(View.GONE);
             binding.doneButton.setVisibility(View.VISIBLE);
@@ -126,20 +123,9 @@ public class SetupActivity extends NoActionBarActivity implements MediaActivity 
     }
 
     private void saveProfile() {
-        binding.displayNameLayout.setError(null);
         binding.userIdLayout.setError(null);
 
-        Editable editable = binding.displayNameTextInput.getEditableText();
-        String displayName = "";
-        if (editable != null) {
-            displayName = editable.toString().trim();
-        }
-        if (displayName.isEmpty()) {
-            binding.displayNameLayout.setError(getString(R.string.set_your_name));
-            return;
-        }
-
-        editable = binding.userIdTextInput.getEditableText();
+        Editable editable = binding.userIdTextInput.getEditableText();
         String userId = "";
         if (editable != null) {
             userId = editable.toString().trim();
@@ -157,7 +143,6 @@ public class SetupActivity extends NoActionBarActivity implements MediaActivity 
 
         updateUI(true);
         profile.put(FirestoreHelper.FIELD_USER_ID, userId);
-        profile.put(FirestoreHelper.FIELD_DISPLAY_NAME, displayName);
         profile.put(FirestoreHelper.FIELD_PROFILE_PICTURE, "");
         viewModel.userIdExists(userId, this::onUserIdChecked);
     }

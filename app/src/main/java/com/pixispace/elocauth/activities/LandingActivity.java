@@ -15,7 +15,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.pixispace.elocauth.R;
@@ -105,9 +104,7 @@ public class LandingActivity extends AppCompatActivity {
                     userProfile.getProfilePictureUrl(),
                     HttpHelper.getInstance().getImageLoader()
             );
-            navHeaderBinding.displayNameTextView.setText(userProfile.getDisplayName());
-            String text = getString(R.string.user_id_template, userProfile.getUserId());
-            navHeaderBinding.userIdTextView.setText(text);
+            navHeaderBinding.userIdTextView.setText(userProfile.getUserId());
             navHeaderBinding.emailAddressTextView.setText(userProfile.getEmailAddress());
         });
     }

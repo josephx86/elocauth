@@ -3,22 +3,14 @@ package com.pixispace.elocauth.data;
 public class UserProfile {
     private final String userId;
 
-    private String profilePictureUrl, displayName, emailAddress;
+    private String profilePictureUrl, emailAddress;
 
     public UserProfile(String userId) {
         this.userId = userId;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
     public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;
-    }
-
-    public String getDisplayName() {
-        return displayName;
     }
 
     public String getProfilePictureUrl() {

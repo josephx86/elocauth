@@ -8,7 +8,6 @@ import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -30,14 +29,12 @@ import java.io.IOException;
 public class ProfileActivity extends AppCompatActivity implements MediaActivity {
     private ActivityProfileBinding binding;
     private UserAccountViewModel viewModel;
-    private ActivityResultLauncher<Intent> textFieldEditorLauncher;
     private ActivityResultLauncher<PickVisualMediaRequest> imagePicker;
     private ActivityResultLauncher<Intent> cameraLauncher;
     private Uri photoUri = null;
     private String originalProfilePicture;
 
     private enum ProfileField {
-        displayName,
         profilePicture,
     }
 
@@ -126,7 +123,6 @@ public class ProfileActivity extends AppCompatActivity implements MediaActivity 
     }
 
     private void setItemTitles() {
-        binding.displayNameItem.titleTextView.setText(R.string.your_name);
         binding.userIdItem.titleTextView.setText(R.string.user_id);
         binding.userIdItem.chevron.setVisibility(View.GONE);
         binding.userIdItem.button.setBackground(null);
@@ -135,28 +131,11 @@ public class ProfileActivity extends AppCompatActivity implements MediaActivity 
     private void setItemValues(UserProfile profile) {
         updateUI(false);
         originalProfilePicture = profile.getProfilePictureUrl();
-        binding.displayNameItem.valueTextView.setText(profile.getDisplayName());
         binding.avatarImageView.setImageUrl(
                 profile.getProfilePictureUrl(),
                 HttpHelper.getInstance().getImageLoader()
         );
         binding.userIdItem.valueTextView.setText(profile.getUserId());
-    }
-
-    private void processChange(ActivityResult result) {
-        int resultCode = result.getResultCode();
-        Intent data = result.getData();
-        if (data != null) {
-            if (resultCode == RESULT_OK) {
-                String newValue = data.getStringExtra(TextEditorActivity.RESULT_MESSAGE);
-                updateField(newValue);
-            } else if (resultCode == RESULT_CANCELED) {
-                String message = data.getStringExtra(TextEditorActivity.RESULT_MESSAGE);
-                if ((message != null) && (!message.isEmpty())) {
-                    ActivityHelper.showModalAlert(ProfileActivity.this, getString(R.string.oops), message);
-                }
-            }
-        }
     }
 
     private void updateField(String value) {
@@ -165,13 +144,8 @@ public class ProfileActivity extends AppCompatActivity implements MediaActivity 
             viewModel.getProfile();
         };
         updateUI(true);
-        switch (currentField) {
-            case displayName:
-                viewModel.updateDisplayName(value, completedCallback);
-                break;
-            case profilePicture:
-                viewModel.updateProfilePicture(value, completedCallback);
-                break;
+        if (currentField == ProfileField.profilePicture) {
+            viewModel.updateProfilePicture(value, completedCallback);
         }
         currentField = null;
     }
@@ -187,13 +161,11 @@ public class ProfileActivity extends AppCompatActivity implements MediaActivity 
     }
 
     private void setListeners() {
-        binding.displayNameItem.button.setOnClickListener(v -> openDisplayNameEditor(ProfileField.displayName));
         binding.cameraButton.setOnClickListener(v -> takePhoto());
         binding.galleryButton.setOnClickListener(v -> pickImage());
     }
 
     private void setLaunchers() {
-        textFieldEditorLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::processChange);
 
         imagePicker = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), result -> {
             if (result != null) {
@@ -209,20 +181,5 @@ public class ProfileActivity extends AppCompatActivity implements MediaActivity 
                 }
             }
         });
-    }
-
-    private void openDisplayNameEditor(ProfileField field) {
-        currentField = field;
-        Intent intent = new Intent(this, TextEditorActivity.class);
-        String fieldName = getString(R.string.your_name);
-        String currentValue = "";
-        UserProfile profile = viewModel.watchProfile().getValue();
-        if (profile != null) {
-            currentValue = profile.getDisplayName();
-        }
-        int maxLength = getResources().getInteger(R.integer.display_name_max_length);
-        FieldEditorArgs data = new FieldEditorArgs(fieldName, currentValue, maxLength);
-        intent.putExtra(TextEditorActivity.EXTRA_DATA, data);
-        textFieldEditorLauncher.launch(intent);
     }
 }
