@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <group android:id="@+id/group1">
+        <item
+            android:id="@+id/mnu_edit_profile"
+            android:icon="@drawable/edit"
+            android:title="@string/edit_profile" />
+    </group>
+    <group android:id="@+id/group2">
         <item
             android:id="@+id/mnu_find_my_eloc"
             android:icon="@drawable/map"
@@ -20,7 +25,7 @@
             android:title="@string/synchronize_clock" />
     </group>
 
-    <group android:id="@+id/group2">
+    <group android:id="@+id/group3">
         <item
             android:id="@+id/mnu_preferences"
             android:icon="@drawable/settings"
@@ -34,7 +39,7 @@
             android:icon="@drawable/person"
             android:title="@string/account_settings" />
     </group>
-    <group android:id="@+id/group3">
+    <group android:id="@+id/group4">
         <item
             android:id="@+id/mnu_about"
             android:icon="@drawable/info"

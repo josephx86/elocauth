@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -46,13 +47,20 @@ public class LandingActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.nav_menu, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             toggleDrawer();
             return true;
+        } else {
+            return onMenuItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -116,9 +124,16 @@ public class LandingActivity extends AppCompatActivity {
 
     private boolean onNavItemSelected(MenuItem item) {
         closeDrawer();
+        return onMenuItemSelected(item);
+    }
+
+    private boolean onMenuItemSelected(MenuItem item) {
 
         final int id = item.getItemId();
-        if (id == R.id.mnu_sign_out) {
+        if (id == R.id.mnu_edit_profile) {
+            editProfile();
+            return true;
+        } else if (id == R.id.mnu_sign_out) {
             signOut();
             return true;
         } else if (id == R.id.mnu_preferences) {
